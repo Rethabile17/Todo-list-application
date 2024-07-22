@@ -6,8 +6,12 @@ const Home = (props) => {
   const navigate = useNavigate()
 
   const onButtonClick = () => {
-    // You'll update this function later
-  }
+    if (loggedIn) {
+      console.log("Logging out...")
+    } else {
+      navigate('/login');
+    }
+  };
 
   return (
     <div className="mainContainer">
@@ -22,7 +26,7 @@ const Home = (props) => {
           onClick={onButtonClick}
           value={loggedIn ? 'Log out' : 'Log in'}
         />
-        {loggedIn ? <div>Your email address is {email}</div> : <div />}
+        {loggedIn ? <div>Your email address is {email}</div> : null}  
       </div>
     </div>
   )

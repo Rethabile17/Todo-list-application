@@ -1,17 +1,44 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Login = (props) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [emailError, setEmailError] = useState('')
-  const [passwordError, setPasswordError] = useState('')
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  const validateForm = () => {
+    setEmailError('');
+    setPasswordError('');
+
+    let isValid = true;
+
+    if (email.trim() === '') {
+      setEmailError('Please enter your email');
+      isValid = false;
+    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      setEmailError('Please enter a valid email');
+      isValid = false;
+    }
+
+    if (password.trim() === '') {
+      setPasswordError('Please enter a password');
+      isValid = false;
+    } else if (password.length < 8) {
+      setPasswordError('The password must be 8 characters or longer');
+      isValid = false;
+    }
+
+    return isValid;
+  };
 
   const onButtonClick = () => {
-    // You'll update this function later...
-  }
+    if (validateForm()) {
+
+      navigate('/home.js');
+    }
+  };
 
   return (
     <div className={'mainContainer'}>
@@ -34,16 +61,22 @@ const Login = (props) => {
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
+          type="password"
           className={'inputBox'}
         />
         <label className="errorLabel">{passwordError}</label>
       </div>
       <br />
       <div className={'inputContainer'}>
-        <input className={'inputButton'} type="button" onClick={onButtonClick} value={'Log in'} />
+        <input
+          className={'inputButton'}
+          type="button"
+          onClick={onButtonClick}
+          value={'Log in'}
+        />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
