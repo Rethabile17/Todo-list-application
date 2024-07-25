@@ -13,6 +13,10 @@ const Home = (props) => {
     }
   };
 
+  const handleregistration = () =>{
+    navigate('./registration')
+  }
+
   return (
     <div className="mainContainer">
       <div className={'titleContainer'}>
@@ -25,6 +29,12 @@ const Home = (props) => {
           type="button"
           onClick={onButtonClick}
           value={loggedIn ? 'Log out' : 'Log in'}
+        />
+        <input
+          className={'inputButton'}
+          type="button"
+          onClick={handleregistration}
+          value={loggedIn ? 'Sign out' : 'Sign Up'}
         />
         {loggedIn ? <div>Your email address is {email}</div> : null}  
       </div>
