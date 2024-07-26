@@ -36,7 +36,7 @@ const Login = () => {
   const onButtonClick = () => {
     if (validateForm()) {
 
-      navigate('/');
+      navigate('/todo');
     }
   };
 

@@ -1,0 +1,102 @@
+
+.todo-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.todo-container h2 {
+  margin-bottom: 10px;
+  text-align: center;
+  color: #333;
+}
+
+.todo-container form {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.todo-container input[type='text'],
+.todo-container select {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.todo-container button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.todo-container button:hover {
+  background-color: #0056b3;
+}
+
+.todo-container input[type='text'][placeholder='Search tasks...'] {
+  margin-bottom: 10px;
+}
+
+.todo-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.todo-container li {
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.todo-container li button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 3px;
+}
+
+.todo-container li button.edit-button {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.todo-container li button:hover {
+  background-color: #c82333;
+}
+
+.todo-container li button.edit-button:hover {
+  background-color: #e0a800;
+}
+
+.todo-container li span {
+  flex: 1;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.todo-container li.low {
+  border-color: #28a745;
+}
+
+.todo-container li.medium {
+  border-color: #ffc107;
+}
+
+.todo-container li.high {
+  border-color: #dc3545;
+}

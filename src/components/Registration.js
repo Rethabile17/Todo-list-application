@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import './Registration.css'
 
 
 
@@ -47,7 +48,7 @@ function Add(props) {
   const onButtonClick = () => {
     if (validateForm()) {
       
-      navigate('/home');
+      navigate('/');
     }
   };
 
@@ -92,7 +93,7 @@ function Add(props) {
           className="inputButton"
           type="button"
           onClick={onButtonClick}
-          value="Register"
+          value="Submit"
         />
       </div>
     </div>
