@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,8 +36,15 @@ const Login = () => {
 
   const onButtonClick = () => {
     if (validateForm()) {
-
-      navigate('/todo');
+      axios.post('http://localhost:3005/login', {
+        email: email,
+        password: password
+      }).then((res) => {
+        console.log(res.data);
+        navigate('/todo');
+      }).catch((error) => {
+        console.error('There was an error!', error);
+      });
     }
   };
 

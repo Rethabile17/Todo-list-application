@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './TodoList.css'; 
 
@@ -11,8 +11,23 @@ const TodoList = () => {
   const [taskDescription, setTaskDescription] = useState('');
   const [taskPriority, setTaskPriority] = useState('Low');
 
-
   const navigate = useNavigate();
+  const apiUrl = 'http://localhost:3005/todos'; // Your backend endpoint
+
+  // Fetch tasks on component mount
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      setTasks(data);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
 
   const validateForm = () => {
     return true;
@@ -26,22 +41,39 @@ const TodoList = () => {
     setNewTask(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (newTask.trim() !== '') {
-      const newTaskObj = {
-        id: tasks.length + 1,
-        description: newTask,
-        priority: taskPriority,
-      };
-      setTasks([...tasks, newTaskObj]);
-      setNewTask('');
+      try {
+        const newTaskObj = {
+          description: newTask,
+          priority: taskPriority,
+        };
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newTaskObj),
+        });
+        const addedTask = await response.json();
+        setTasks([...tasks, addedTask]);
+        setNewTask('');
+        setTaskPriority('Low');
+      } catch (error) {
+        console.error('Error adding task:', error);
+      }
     }
   };
 
-  const handleDelete = (taskId) => {
-    const updatedTasks = tasks.filter((task) => task.id !== taskId);
-    setTasks(updatedTasks);
+  const handleDelete = async (taskId) => {
+    try {
+      await fetch(`${apiUrl}/${taskId}`, { method: 'DELETE' });
+      const updatedTasks = tasks.filter((task) => task.id !== taskId);
+      setTasks(updatedTasks);
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
 
   const handleEdit = (taskId) => {
@@ -52,19 +84,33 @@ const TodoList = () => {
     setEditMode(true);
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    const updatedTasks = tasks.map((task) =>
-      task.id === editedTaskId
-        ? { ...task, description: taskDescription, priority: taskPriority }
-        : task
-    );
+    try {
+      const updatedTask = {
+        description: taskDescription,
+        priority: taskPriority,
+      };
+      const response = await fetch(`${apiUrl}/${editedTaskId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTask),
+      });
+      const updatedTaskData = await response.json();
+      const updatedTasks = tasks.map((task) =>
+        task.id === editedTaskId ? updatedTaskData : task
+      );
 
-    setTasks(updatedTasks);
-    setEditMode(false);
-    setTaskDescription('');
-    setTaskPriority('Low');
-    setEditedTaskId(null);
+      setTasks(updatedTasks);
+      setEditMode(false);
+      setTaskDescription('');
+      setTaskPriority('Low');
+      setEditedTaskId(null);
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
   };
 
   const handleCancelUpdate = () => {
@@ -73,7 +119,6 @@ const TodoList = () => {
     setTaskPriority('Low');
     setEditedTaskId(null);
   };
-
 
   const priorityColor = (priority) => {
     switch (priority) {
@@ -105,9 +150,8 @@ const TodoList = () => {
           onChange={editMode ? (e) => setTaskDescription(e.target.value) : handleChange}
         />
         <select
-          value={editMode ? taskPriority : 'Low'}
+          value={taskPriority}
           onChange={(e) => setTaskPriority(e.target.value)}
-          disabled={editMode}
         >
           <option value="High">High</option>
           <option value="Medium">Medium</option>
@@ -143,6 +187,5 @@ const TodoList = () => {
     </div>
   );
 };
-  
 
 export default TodoList;

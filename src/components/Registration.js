@@ -1,28 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './Registration.css'
-
-
+import './Registration.css';
+import axios from "axios";
 
 function Add(props) {
-  const [userName, setUserName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userNameError, setUserNameError] = useState('');
+  const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   
   const navigate = useNavigate();
 
   const validateForm = () => {
-    setUserNameError('');
+    setNameError('');
     setEmailError('');
     setPasswordError('');
 
     let isValid = true;
 
-    if (userName.trim() === '') {
-      setUserNameError('Please enter your username');
+    if (name.trim() === '') {
+      setNameError('Please enter your name');
       isValid = false;
     }
 
@@ -47,24 +46,32 @@ function Add(props) {
 
   const onButtonClick = () => {
     if (validateForm()) {
-      
-      navigate('/');
+      axios.post('http://localhost:3005/users', {
+        name: name,
+        email: email,
+        password: password
+      }).then((res) => {
+        console.log(res.data);
+        navigate('/');
+      }).catch((error) => {
+        console.error('There was an error!', error);
+      });
     }
   };
 
   return (
-    <div  className="mainInput">
+    <div className="mainInput">
       <div className="titleInput">Registration</div>
       <br />
       <div className="input1">
         <input 
           type="text"
-          value={userName}
-          placeholder="Enter your username here"
-          onChange={(ev) => setUserName(ev.target.value)}
+          value={name}
+          placeholder="Enter your name here"
+          onChange={(ev) => setName(ev.target.value)}
           className="inputBox2"
         />
-        <label className="errorLabel">{userNameError}</label>
+        <label className="errorLabel">{nameError}</label>
       </div>
       <br />
       <div className="input1">
