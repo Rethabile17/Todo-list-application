@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); 
+const cors = require('cors');
 const { Sequelize, Model, DataTypes } = require('sequelize');
 
 const app = express();
@@ -19,14 +19,6 @@ User.init({
   email: DataTypes.STRING,
   password: DataTypes.STRING
 }, { sequelize, modelName: 'user' });
-
-// Define login  model
-class login extends Model {}
-User.init({
-  email: DataTypes.STRING,
-  password: DataTypes.STRING
-}, { sequelize, modelName: 'login' });
-
 
 // Define Todo model
 class Todo extends Model {}
@@ -53,8 +45,6 @@ app.get('/users', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
-
-
 
 app.get('/users/:id', async (req, res) => {
   try {
@@ -121,7 +111,6 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Login failed' });
   }
 });
-
 
 // CRUD routes for Todo model
 app.get('/todos', async (req, res) => {

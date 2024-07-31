@@ -23,6 +23,7 @@ const TodoList = () => {
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
+      console.log(data)
       setTasks(data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -46,8 +47,8 @@ const TodoList = () => {
     if (newTask.trim() !== '') {
       try {
         const newTaskObj = {
-          description: newTask,
-          priority: taskPriority,
+          message: newTask,
+         
         };
         const response = await fetch(apiUrl, {
           method: 'POST',
@@ -173,12 +174,10 @@ const TodoList = () => {
 
       <ul>
         {tasks
-          .filter((task) =>
-            task.description.toLowerCase().includes(searchTerm.toLowerCase())
-          )
+          
           .map((task) => (
             <li key={task.id} style={{ color: priorityColor(task.priority) }}>
-              {task.description} - {task.priority}
+              {task.message} - {task.priority}
               <button onClick={() => handleEdit(task.id)}>Edit</button>
               <button onClick={() => handleDelete(task.id)}>Delete</button>
             </li>
