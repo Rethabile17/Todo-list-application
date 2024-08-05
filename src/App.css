@@ -1,11 +1,13 @@
-.mainContainer {
+.mainContainer{
     flex-direction: column;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-  }
-  
+    height: 590px;
+    background-color: burlywood;
+    border: 140px solid white;
+    ;
+}
   .titleContainer {
     display: flex;
     flex-direction: column;
@@ -13,6 +15,7 @@
     font-weight: bolder;
     align-items: center;
     justify-content: center;
+    color: whitesmoke;
   }
   
   .resultContainer,
@@ -27,7 +30,7 @@
   .historyContainer {
     flex-direction: column;
     display: flex;
-    height: 200px;
+    height: 140px;
     align-items: center;
     flex-grow: 5;
     justify-content: flex-start;
@@ -38,7 +41,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 260px;
+    height: 200px;
   }
   
   .inputContainer {
@@ -55,7 +58,7 @@
   
   .inputBox {
     height: 48px;
-    width: 400px;
+    width: 300px;
     font-size: large;
     border-radius: 8px;
     border: 1px solid grey;

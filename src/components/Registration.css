@@ -3,7 +3,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 590px;
+    background-color: burlywood;
+    border: 100px solid white;
   }
   
   .titleInput {
@@ -13,13 +15,14 @@
     font-weight: bolder;
     align-items: center;
     justify-content: center;
+    color: whitesmoke;
   }
   
   .resultContainer,
   .historyItem {
     flex-direction: row;
     display: flex;
-    width: 400px;
+    width: 200px ;
     align-items: center;
     justify-content: space-between;
   }
@@ -38,7 +41,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 260px;
+    height: 48px;
+    width: 115px;
   }
   
     .input1 {
@@ -55,7 +59,7 @@
   
   .inputBox2 {
     height: 48px;
-    width: 400px;
+    width: 300px;
     font-size: large;
     border-radius: 8px;
     border: 1px solid grey;

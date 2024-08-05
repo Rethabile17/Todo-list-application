@@ -12,9 +12,8 @@ const TodoList = () => {
   const [taskPriority, setTaskPriority] = useState('Low');
 
   const navigate = useNavigate();
-  const apiUrl = 'http://localhost:3005/todos'; // Your backend endpoint
+  const apiUrl = 'http://localhost:3005/todos'; 
 
-  // Fetch tasks on component mount
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -126,7 +125,7 @@ const TodoList = () => {
       case 'High':
         return 'red';
       case 'Medium':
-        return 'yellow';
+        return 'blue';
       case 'Low':
         return 'green';
       default:

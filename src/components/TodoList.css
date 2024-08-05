@@ -71,7 +71,7 @@
 }
 
 .todo-container li button.edit-button {
-  background-color: #ffc107;
+  background-color: blue;
   color: #333;
 }
 
@@ -80,7 +80,7 @@
 }
 
 .todo-container li button.edit-button:hover {
-  background-color: #e0a800;
+  background-color: blue;
 }
 
 .todo-container li span {
@@ -94,7 +94,7 @@
 }
 
 .todo-container li.medium {
-  border-color: #ffc107;
+  border-color: blue;
 }
 
 .todo-container li.high {
