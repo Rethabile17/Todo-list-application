@@ -23,11 +23,16 @@ User.init({
 // Define Todo model
 class Todo extends Model {}
 Todo.init({
-  message: DataTypes.STRING
+  message: DataTypes.STRING,
+  priority: DataTypes.STRING, // Add priority field
+  userId: DataTypes.INTEGER    // Add userId field
 }, { sequelize, modelName: 'todo' });
 
 // Sync models with database
-sequelize.sync().then(() => console.log('Database synced'));
+
+// Sync models with database
+sequelize.sync({ alter: true }).then(() => console.log('Database synced'));
+
 
 // Middleware for parsing request body
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -122,6 +127,38 @@ app.get('/todos', async (req, res) => {
   }
 });
 
+
+// Retrieve todos for a specific user
+app.get('/todos/user/:userId', async (req, res) => {
+  const userId = req.params.userId; // Get userId from request parameters
+  try {
+    const todos = await Todo.findAll({
+      where: { userId } // Find todos that belong to the user
+    });
+    res.json(todos);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch todos for the user' });
+  }
+});
+
+// Delete a specific todo for a specific user
+app.delete('/todos/user/:userId/:todoId', async (req, res) => {
+  const { userId, todoId } = req.params;
+
+  try {
+      const todo = await Todo.findOne({ where: { id: todoId, userId } });
+      if (todo) {
+          await todo.destroy();
+          res.json({ message: 'Todo deleted successfully' });
+      } else {
+          res.status(404).json({ message: 'Todo not found for this user' });
+      }
+  } catch (err) {
+      res.status(500).json({ error: 'Failed to delete todo' });
+  }
+});
+
+
 app.get('/todos/:id', async (req, res) => {
   try {
     const todo = await Todo.findByPk(req.params.id);
@@ -135,14 +172,21 @@ app.get('/todos/:id', async (req, res) => {
   }
 });
 
+// POST route to create a new todo with userId
 app.post('/todos', async (req, res) => {
+  const { message, priority, userId } = req.body;
+  
+  console.log('Incoming todo data:', req.body); // Log incoming data
+  
   try {
-    const todo = await Todo.create(req.body);
+    const todo = await Todo.create({ message, priority, userId });
     res.status(201).json(todo);
   } catch (err) {
+    console.error('Error creating todo:', err); // Log the error for debugging
     res.status(500).json({ error: 'Failed to create todo' });
   }
 });
+
 
 app.put('/todos/:id', async (req, res) => {
   try {
@@ -157,6 +201,26 @@ app.put('/todos/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to update todo' });
   }
 });
+
+
+// Update a specific todo for a specific user
+app.put('/todos/user/:userId/:todoId', async (req, res) => {
+  const { userId, todoId } = req.params;
+  const { message, priority } = req.body;
+
+  try {
+      const todo = await Todo.findOne({ where: { id: todoId, userId } });
+      if (todo) {
+          await todo.update({ message, priority });
+          res.json(todo);
+      } else {
+          res.status(404).json({ message: 'Todo not found for this user' });
+      }
+  } catch (err) {
+      res.status(500).json({ error: 'Failed to update todo' });
+  }
+});
+
 
 app.delete('/todos/:id', async (req, res) => {
   try {

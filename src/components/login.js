@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ onLogin }) => { // Accept onLogin as a prop
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -36,15 +36,11 @@ const Login = () => {
 
   const onButtonClick = () => {
     if (validateForm()) {
-      axios.post('http://localhost:3005/login', {
-        email: email,
-        password: password
-      }).then((res) => {
-        console.log(res.data);
-        navigate('/todo');
-      }).catch((error) => {
-        console.error('There was an error!', error);
-      });
+      onLogin(email, password) // Call the login function passed via props
+        .then(() => navigate('/todo')) // Navigate after successful login
+        .catch((error) => {
+          console.error('Login failed:', error);
+        });
     }
   };
 
@@ -53,7 +49,6 @@ const Login = () => {
       <div className={'titleContainer'}>
         <div>Login</div>
       </div>
-      <br />
       <div className={'inputContainer'}>
         <input
           value={email}
@@ -63,7 +58,6 @@ const Login = () => {
         />
         <label className="errorLabel">{emailError}</label>
       </div>
-      <br />
       <div className={'inputContainer'}>
         <input
           value={password}
@@ -74,7 +68,6 @@ const Login = () => {
         />
         <label className="errorLabel">{passwordError}</label>
       </div>
-      <br />
       <div className={'inputContainer'}>
         <input
           className={'inputButton'}
@@ -82,6 +75,10 @@ const Login = () => {
           onClick={onButtonClick}
           value={'Log in'}
         />
+      </div>
+      <div className='inputContainer text'>
+        Don't have an account? 
+        <Link to="/registration" className={'registerLink'}> Register here.</Link>
       </div>
     </div>
   );
