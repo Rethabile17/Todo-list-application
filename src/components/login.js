@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-const Login = ({ onLogin }) => { // Accept onLogin as a prop
+const Login = ({ onLogin }) => { 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -36,8 +36,8 @@ const Login = ({ onLogin }) => { // Accept onLogin as a prop
 
   const onButtonClick = () => {
     if (validateForm()) {
-      onLogin(email, password) // Call the login function passed via props
-        .then(() => navigate('/todo')) // Navigate after successful login
+      onLogin(email, password) 
+        .then(() => navigate('/todo')) 
         .catch((error) => {
           console.error('Login failed:', error);
         });

@@ -56,7 +56,7 @@ const TodoList = ({ userId }) => {
         const newTaskObj = {
           message: newTask,
           priority: taskPriority, 
-          userId:userId // Add priority to new task
+          userId:userId 
         };
         const response = await fetch("http://localhost:3005/todos", {
           method: 'POST',
@@ -66,10 +66,10 @@ const TodoList = ({ userId }) => {
           body: JSON.stringify(newTaskObj),
         });
         
-        // Log the entire response
+        
         console.log('Response:', response);
         
-        // Check if the response is OK (status 200-299)
+        
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -97,7 +97,7 @@ const TodoList = ({ userId }) => {
 
   const handleEdit = (taskId) => {
     const taskToEdit = tasks.find((task) => task.id === taskId);
-    setTaskDescription(taskToEdit.message); // Change from taskToEdit.description to taskToEdit.message
+    setTaskDescription(taskToEdit.message); 
     setTaskPriority(taskToEdit.priority);
     setEditedTaskId(taskId);
     setEditMode(true);
@@ -118,10 +118,10 @@ const TodoList = ({ userId }) => {
         body: JSON.stringify(updatedTask),
       });
   
-      // Log the response for debugging
+    
       console.log('Update Response:', response);
   
-      // Check if the response is OK (status 200-299)
+      
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -149,7 +149,7 @@ const TodoList = ({ userId }) => {
   };
 
   const priorityColor = (priority) => {
-    console.log("Priority:", priority); // Debugging line to confirm priority value
+    console.log("Priority:", priority); 
     switch (priority) {
         case 'High':
             return 'red';
@@ -158,7 +158,7 @@ const TodoList = ({ userId }) => {
         case 'Low':
             return 'green';
         default:
-            return 'black'; // This will show if `priority` is undefined or not one of the cases
+            return 'black'; 
     }
   };
 
@@ -179,7 +179,7 @@ const TodoList = ({ userId }) => {
           onChange={editMode ? (e) => setTaskDescription(e.target.value) : handleChange}
         />
         <select
-          value={taskPriority} // Set value to reflect the current priority
+          value={taskPriority} 
           onChange={(e) => setTaskPriority(e.target.value)}
         >
           <option value="High">High</option>
@@ -202,7 +202,7 @@ const TodoList = ({ userId }) => {
 
       <ul>
         {tasks
-          .filter((task) => task.message.includes(searchTerm)) // Apply search filter
+          .filter((task) => task.message.includes(searchTerm))
           .map((task) => (
             <li key={task.id} style={{ color: priorityColor(task.priority) }}>
               {task.message} - {task.priority}
