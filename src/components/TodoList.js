@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './TodoList.css'; 
+import Swal from 'sweetalert';
 
 const TodoList = ({ userId }) => {
   const [tasks, setTasks] = useState([]);
@@ -22,6 +23,8 @@ const TodoList = ({ userId }) => {
     fetchTasks();
   }, []);
 
+  
+  
   const fetchTasks = async () => {
     try {
       const response = await fetch(apiUrl);
@@ -51,36 +54,39 @@ const TodoList = ({ userId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (newTask.trim() !== '') {
-      try {
-        const newTaskObj = {
-          message: newTask,
-          priority: taskPriority, 
-          userId:userId 
-        };
-        const response = await fetch("http://localhost:3005/todos", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newTaskObj),
-        });
-        
-        
-        console.log('Response:', response);
-        
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+    if (newTask.trim() === '') {
+      Swal('Error', 'Please enter a task before submitting!', 'error');
+      return;
+    }
   
-        const addedTask = await response.json();
-        setTasks([...tasks, addedTask]);
-        setNewTask('');
-        setTaskPriority(taskPriority);
-      } catch (error) {
-        console.error('Error adding task:', error);
+    try {
+      const newTaskObj = {
+        message: newTask,
+        priority: taskPriority,
+        userId: userId,
+      };
+  
+      const response = await fetch("http://localhost:3005/todos", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTaskObj),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
+  
+      const addedTask = await response.json();
+      setTasks([...tasks, addedTask]);
+      setNewTask('');
+      setTaskPriority(taskPriority);
+  
+      Swal('Success', 'Task added successfully!', 'success');
+    } catch (error) {
+      console.error('Error adding task:', error);
+      Swal('Error', 'Failed to add the task. Try again later.', 'error');
     }
   };
   
@@ -179,7 +185,7 @@ const TodoList = ({ userId }) => {
           onChange={editMode ? (e) => setTaskDescription(e.target.value) : handleChange}
         />
         <select
-          value={taskPriority} 
+          value={taskPriority}
           onChange={(e) => setTaskPriority(e.target.value)}
         >
           <option value="High">High</option>
@@ -193,26 +199,31 @@ const TodoList = ({ userId }) => {
           </button>
         )}
       </form>
-
+  
       <input
         type="text"
         placeholder="Search tasks..."
         onChange={(e) => handleSearch(e.target.value)}
       />
-
-      <ul>
-        {tasks
-          .filter((task) => task.message.includes(searchTerm))
-          .map((task) => (
-            <li key={task.id} style={{ color: priorityColor(task.priority) }}>
-              {task.message} - {task.priority}
-              <button onClick={() => handleEdit(task.id)}>Edit</button>
-              <button onClick={() => handleDelete(task.id)}>Delete</button>
-            </li>
-          ))}
-      </ul>
+  
+      {tasks.length === 0 ? (
+        <p className="no-tasks-message">No tasks available</p>
+      ) : (
+        <ul>
+          {tasks
+            .filter((task) => task.message.includes(searchTerm))
+            .map((task) => (
+              <li key={task.id} style={{ color: priorityColor(task.priority) }}>
+                {task.message} - {task.priority}
+                <button onClick={() => handleEdit(task.id)}>Edit</button>
+                <button onClick={() => handleDelete(task.id)}>Delete</button>
+              </li>
+            ))}
+        </ul>
+      )}
     </div>
   );
+  
 };
 
 export default TodoList;

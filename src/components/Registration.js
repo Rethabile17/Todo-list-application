@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import './Registration.css';
 import axios from "axios";
+import Swal from 'sweetalert2';
+
 
 function Add(props) {
   const [name, setName] = useState("");
@@ -51,9 +53,21 @@ function Add(props) {
         email: email,
         password: password
       }).then((res) => {
+        Swal.fire({
+          title: "Registration successfully!",
+          text: "Welcome  user!",
+          icon: "success",
+         
+        });
         console.log(res.data);
         navigate('/login');
       }).catch((error) => {
+        Swal.fire({
+          title: "Login unsuccessful!",
+          text: "Check login details!",
+          icon: "error",
+          
+        });
         console.error('There was an error!', error);
       });
     }

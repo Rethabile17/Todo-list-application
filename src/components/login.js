@@ -1,12 +1,14 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
-const Login = ({ onLogin }) => { 
+const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false); 
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -34,13 +36,29 @@ const Login = ({ onLogin }) => {
     return isValid;
   };
 
-  const onButtonClick = () => {
+  const onButtonClick = async () => {
     if (validateForm()) {
-      onLogin(email, password) 
-        .then(() => navigate('/todo')) 
-        .catch((error) => {
-          console.error('Login failed:', error);
+      setIsSubmitting(true); 
+      try {
+        await onLogin(email, password); 
+        Swal.fire({
+          title: 'Login successfully!',
+          text: 'Welcome back user!',
+          icon: 'success',
+          confirmButtonText: 'Proceed',
         });
+        navigate('/todo');
+      } catch (error) {
+        Swal.fire({
+          title: 'Login unsuccessful!',
+          text: error.response?.data?.message || 'Check login details!',
+          icon: 'error',
+          confirmButtonText: 'Try again',
+        });
+        console.error('Login failed:', error);
+      } finally {
+        setIsSubmitting(false); 
+      }
     }
   };
 
@@ -54,7 +72,7 @@ const Login = ({ onLogin }) => {
           value={email}
           placeholder="Enter your email here"
           onChange={(ev) => setEmail(ev.target.value)}
-          className={'inputBox'}
+          className={`inputBox ${emailError ? 'errorBorder' : ''}`}
         />
         <label className="errorLabel">{emailError}</label>
       </div>
@@ -64,7 +82,7 @@ const Login = ({ onLogin }) => {
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
           type="password"
-          className={'inputBox'}
+          className={`inputBox ${passwordError ? 'errorBorder' : ''}`}
         />
         <label className="errorLabel">{passwordError}</label>
       </div>
@@ -74,11 +92,14 @@ const Login = ({ onLogin }) => {
           type="button"
           onClick={onButtonClick}
           value={'Log in'}
+          disabled={isSubmitting} 
         />
       </div>
-      <div className='inputContainer text'>
-        Don't have an account? 
-        <Link to="/registration" className={'registerLink'}> Register here.</Link>
+      <div className="inputContainer text">
+        Don't have an account?{' '}
+        <Link to="/registration" className={'registerLink'}>
+          Register here.
+        </Link>
       </div>
     </div>
   );
